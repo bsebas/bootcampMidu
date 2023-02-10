@@ -15,12 +15,15 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-const DATABASE_URL = process.env.DATABASE_URL
+const { DATABASE_URL, DATABASE_URL_TEST, NODE_ENV } = process.env
 
-connectDb(DATABASE_URL)
+const connection = NODE_ENV === 'test' ? DATABASE_URL_TEST : DATABASE_URL
 
-app.get('/api/notes', (_, response) => {
-  Note.find({}).then(notes => response.json(notes))
+connectDb(connection)
+
+app.get('/api/notes', async (_, response) => {
+  const notes = await Note.find({})
+  return response.json(notes)
 })
 
 app.get('/api/notes/:id', (request, response, next) => {
@@ -31,7 +34,7 @@ app.get('/api/notes/:id', (request, response, next) => {
   }).catch(err => next(err))
 })
 
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', async (request, response, next) => {
   const note = request.body
 
   if (!note.content) {
@@ -46,7 +49,12 @@ app.post('/api/notes', (request, response) => {
     important: note.important || false
   })
 
-  newNote.save().then(savedNote => response.json(savedNote))
+  try {
+    const savedNote = await newNote.save()
+    response.json(savedNote)
+  } catch (error) {
+    next(error)
+  }
 })
 
 app.put('/api/notes/:id', (request, response, next) => {
@@ -63,12 +71,11 @@ app.put('/api/notes/:id', (request, response, next) => {
     .catch(err => next(err))
 })
 
-app.delete('/api/notes/:id', (request, response, next) => {
+app.delete('/api/notes/:id', async (request, response, next) => {
   const { id } = request.params
 
-  Note.findByIdAndRemove(id).then(() => {
-    response.status(204).end()
-  }).catch(err => next(err))
+  await Note.findByIdAndRemove(id)
+  response.status(204).end()
 })
 
 app.use(NotFound)
@@ -77,7 +84,9 @@ app.use(handleErrors)
 
 const PORT = process.env.PORT || 3000
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(process.env.DATABASE_URL)
   console.log(`Serve running on port ${PORT}`)
 })
+
+export { app, server }

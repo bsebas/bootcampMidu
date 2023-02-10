@@ -82,8 +82,8 @@ test('a note can be delete', async () => {
 
 test('a note that do not exist can not be deleted', async () => {
   await api
-    .delete('/api/notes/63e570c9f327633192325910')
-    .expect(400)
+    .delete('/api/notes/63e570c9f327633192325919')
+    .expect(404)
 
   const { response } = await getAllContentFromNotes()
 

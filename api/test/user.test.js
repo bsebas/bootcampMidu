@@ -1,8 +1,10 @@
-import { User } from '../src/models/User.js'
 import bcrypt from 'bcrypt'
-import { api, getUsers } from './helpers'
 import mongoose from 'mongoose'
+
+import { api, getUsers } from './helpers'
 import { server } from '../src'
+
+import { User } from '../src/models/User.js'
 
 describe('creating a new user', () => {
   beforeEach(async () => {

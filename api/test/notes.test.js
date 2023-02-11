@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 
 import { server } from '../src'
 import { Note } from '../src/models/Note'
+
 import { api, getAllContentFromNotes, initialNotes } from './helpers'
 
 beforeEach(async () => {

@@ -10,6 +10,7 @@ import NotFound from './middleware/NotFound.js'
 
 import { usersRoutes } from './controllers/users.js'
 import { notesRoutes } from './controllers/notes.js'
+import { loginRoutes } from './controllers/login.js'
 
 dotenv.config()
 
@@ -27,6 +28,8 @@ connectDb(connection)
 app.use('/api/notes', notesRoutes)
 
 app.use('/api/users', usersRoutes)
+
+app.use('/api/login', loginRoutes)
 
 app.use(NotFound)
 

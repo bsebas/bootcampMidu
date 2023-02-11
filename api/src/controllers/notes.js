@@ -1,4 +1,5 @@
 import express from 'express'
+import userExtractor from '../middleware/userExtractor.js'
 
 import { Note } from '../models/Note.js'
 import { User } from '../models/User.js'
@@ -18,8 +19,9 @@ notesRoutes.get('/:id', (request, response, next) => {
   }).catch(err => next(err))
 })
 
-notesRoutes.post('/', async (request, response, next) => {
-  const { content, important = false, userId } = request.body
+notesRoutes.post('/', userExtractor, async (request, response, next) => {
+  const { content, important = false } = request.body
+  const { userId } = request
 
   if (!content) {
     return response.status(400).json({
@@ -47,7 +49,7 @@ notesRoutes.post('/', async (request, response, next) => {
   }
 })
 
-notesRoutes.put('/:id', (request, response, next) => {
+notesRoutes.put('/:id', userExtractor, (request, response, next) => {
   const { id } = request.params
   const note = request.body
 
@@ -61,7 +63,7 @@ notesRoutes.put('/:id', (request, response, next) => {
     .catch(err => next(err))
 })
 
-notesRoutes.delete('/:id', async (request, response, next) => {
+notesRoutes.delete('/:id', userExtractor, async (request, response, next) => {
   const { id } = request.params
 
   const res = await Note.findByIdAndDelete(id)

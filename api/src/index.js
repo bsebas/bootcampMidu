@@ -19,6 +19,8 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
+app.use(express.static('../app/dist'))
+
 const { DATABASE_URL, DATABASE_URL_TEST, NODE_ENV } = process.env
 
 const connection = NODE_ENV === 'test' ? DATABASE_URL_TEST : DATABASE_URL

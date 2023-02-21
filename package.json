@@ -1,0 +1,36 @@
+{
+  "name": "bootcampmidu",
+  "version": "1.0.0",
+  "description": "",
+  "private": "true",
+  "main": "index.js",
+  "workspaces": [
+    "api",
+    "app"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces=app",
+    "start": "npm run start --workspaces=api",
+    "dev:api": "npm run build && npm run dev --workspaces=api"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bsebas/bootcampMidu.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bsebas/bootcampMidu/issues"
+  },
+  "homepage": "https://github.com/bsebas/bootcampMidu#readme",
+  "devDependencies": {
+    "eslint": "8.33.0",
+    "eslint-config-standard": "17.0.0",
+    "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-n": "15.6.1",
+    "eslint-plugin-promise": "6.1.1"
+  },
+  "proxy": "http://localhost:3000"
+}
